@@ -71,6 +71,7 @@ function NovdorLibrary:CreateWindow(config)
 	local ScreenGui = Instance.new("ScreenGui")
 	ScreenGui.Name = "NovdorGui"
 	ScreenGui.ResetOnSpawn = false
+	ScreenGui.DisplayOrder = 999
 	ScreenGui.Parent = PlayerGui
 
 	local MainFrame = Instance.new("Frame")
@@ -81,7 +82,7 @@ function NovdorLibrary:CreateWindow(config)
 	MainFrame.BorderSizePixel = 0
 	MainFrame.Active = true
 	MainFrame.Draggable = true
-	MainFrame.ClipsDescendants = true
+	MainFrame.ClipsDescendants = false
 	MainFrame.Parent = ScreenGui
 
 	local MainCorner = Instance.new("UICorner")
@@ -259,20 +260,87 @@ function NovdorLibrary:CreateWindow(config)
 	local CloseBtn = Instance.new("TextButton")
 	CloseBtn.Size = UDim2.new(0, 28, 0, 28)
 	CloseBtn.Position = UDim2.new(1, -34, 0, 11)
-	CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
 	CloseBtn.Text = "✕"
 	CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 	CloseBtn.Font = SelectedFont
 	CloseBtn.TextSize = 14
 	CloseBtn.BorderSizePixel = 0
 	CloseBtn.Parent = TitleBar
-	CreateAnimatedGradient(CloseBtn)
 
 	local CloseCorner = Instance.new("UICorner")
 	CloseCorner.CornerRadius = UDim.new(0, 8)
 	CloseCorner.Parent = CloseBtn
 
-	CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+	CloseBtn.MouseButton1Click:Connect(function()
+		ClickSound:Play()
+		local ConfirmFrame = Instance.new("Frame")
+		ConfirmFrame.Size = UDim2.new(0, 300, 0, 140)
+		ConfirmFrame.Position = UDim2.new(0.5, -150, 0.5, -70)
+		ConfirmFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
+		ConfirmFrame.BorderSizePixel = 0
+		ConfirmFrame.ZIndex = 50
+		ConfirmFrame.Parent = ScreenGui
+
+		local ConfirmCorner = Instance.new("UICorner")
+		ConfirmCorner.CornerRadius = UDim.new(0, 12)
+		ConfirmCorner.Parent = ConfirmFrame
+
+		local ConfirmStroke = Instance.new("UIStroke")
+		ConfirmStroke.Thickness = 2
+		ConfirmStroke.Parent = ConfirmFrame
+		CreateAnimatedGradient(ConfirmStroke)
+
+		local ConfirmTitle = Instance.new("TextLabel")
+		ConfirmTitle.Size = UDim2.new(1, 0, 0, 50)
+		ConfirmTitle.Text = "هل أنت متأكد من إغلاق وحذف السكربت؟"
+		ConfirmTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+		ConfirmTitle.Font = SelectedFont
+		ConfirmTitle.TextSize = 13
+		ConfirmTitle.BackgroundTransparency = 1
+		ConfirmTitle.ZIndex = 51
+		ConfirmTitle.Parent = ConfirmFrame
+
+		local YesBtn = Instance.new("TextButton")
+		YesBtn.Size = UDim2.new(0, 110, 0, 34)
+		YesBtn.Position = UDim2.new(0, 25, 1, -50)
+		YesBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
+		YesBtn.Text = "نعم (حذف)"
+		YesBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+		YesBtn.Font = SelectedFont
+		YesBtn.TextSize = 13
+		YesBtn.ZIndex = 51
+		YesBtn.Parent = ConfirmFrame
+
+		local YesCorner = Instance.new("UICorner")
+		YesCorner.CornerRadius = UDim.new(0, 8)
+		YesCorner.Parent = YesBtn
+
+		local NoBtn = Instance.new("TextButton")
+		NoBtn.Size = UDim2.new(0, 110, 0, 34)
+		NoBtn.Position = UDim2.new(1, -135, 1, -50)
+		NoBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
+		NoBtn.Text = "إلغاء"
+		NoBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+		NoBtn.Font = SelectedFont
+		NoBtn.TextSize = 13
+		NoBtn.ZIndex = 51
+		NoBtn.Parent = ConfirmFrame
+
+		local NoCorner = Instance.new("UICorner")
+		NoCorner.CornerRadius = UDim.new(0, 8)
+		NoCorner.Parent = NoBtn
+
+		YesBtn.MouseButton1Click:Connect(function()
+			ClickSound:Play()
+			ScreenGui:Destroy()
+		end)
+
+		NoBtn.MouseButton1Click:Connect(function()
+			ClickSound:Play()
+			ConfirmFrame:Destroy()
+		end)
+	end)
 
 	local TabSidebar = Instance.new("ScrollingFrame")
 	TabSidebar.Size = UDim2.new(0, 140, 1, -65)
@@ -331,7 +399,7 @@ function NovdorLibrary:CreateWindow(config)
 		TabPage.Parent = ContentContainer
 
 		local SubTabBar = Instance.new("ScrollingFrame")
-		SubTabBar.Size = UDim2.new(1, 0, 0, 30)
+		SubTabBar.Size = UDim2.new(1, 0, 0, 32)
 		SubTabBar.Position = UDim2.new(0, 0, 0, 0)
 		SubTabBar.BackgroundTransparency = 1
 		SubTabBar.BorderSizePixel = 0
@@ -345,8 +413,8 @@ function NovdorLibrary:CreateWindow(config)
 		SubTabLayout.Padding = UDim.new(0, 6)
 
 		local SubContentContainer = Instance.new("Frame")
-		SubContentContainer.Size = UDim2.new(1, 0, 1, -35)
-		SubContentContainer.Position = UDim2.new(0, 0, 0, 35)
+		SubContentContainer.Size = UDim2.new(1, 0, 1, -38)
+		SubContentContainer.Position = UDim2.new(0, 0, 0, 38)
 		SubContentContainer.BackgroundTransparency = 1
 		SubContentContainer.Parent = TabPage
 
@@ -372,10 +440,10 @@ function NovdorLibrary:CreateWindow(config)
 
 		function Tab:CreateSubTab(subTabName)
 			local SubBtn = Instance.new("TextButton")
-			SubBtn.Size = UDim2.new(0, 90, 1, 0)
+			SubBtn.Size = UDim2.new(0, 100, 1, 0)
 			SubBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 			SubBtn.BorderSizePixel = 0
-			SubBtn.Text = subTabName
+			SubBtn.Text = subTabName or "Sub Tab"
 			SubBtn.TextColor3 = Color3.fromRGB(160, 160, 180)
 			SubBtn.Font = SelectedFont
 			SubBtn.TextSize = 12
@@ -477,7 +545,7 @@ function NovdorLibrary:CreateWindow(config)
 						SettingsPage.Size = UDim2.new(1, 0, 1, 0)
 						SettingsPage.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
 						SettingsPage.BorderSizePixel = 0
-						SettingsPage.ZIndex = 5
+						SettingsPage.ZIndex = 15
 						SettingsPage.Parent = SubContentContainer
 
 						local SettPageCorner = Instance.new("UICorner")
@@ -487,7 +555,7 @@ function NovdorLibrary:CreateWindow(config)
 						local BackHeader = Instance.new("Frame")
 						BackHeader.Size = UDim2.new(1, 0, 0, 32)
 						BackHeader.BackgroundTransparency = 1
-						BackHeader.ZIndex = 6
+						BackHeader.ZIndex = 16
 						BackHeader.Parent = SettingsPage
 
 						local BackBtn = Instance.new("TextButton")
@@ -498,7 +566,7 @@ function NovdorLibrary:CreateWindow(config)
 						BackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 						BackBtn.Font = SelectedFont
 						BackBtn.TextSize = 12
-						BackBtn.ZIndex = 6
+						BackBtn.ZIndex = 16
 						BackBtn.Parent = BackHeader
 
 						local BackCorner = Instance.new("UICorner")
@@ -514,14 +582,14 @@ function NovdorLibrary:CreateWindow(config)
 						SettTitle.TextSize = 13
 						SettTitle.TextXAlignment = Enum.TextXAlignment.Left
 						SettTitle.BackgroundTransparency = 1
-						SettTitle.ZIndex = 6
+						SettTitle.ZIndex = 16
 						SettTitle.Parent = BackHeader
 
 						local SettingsContainer = Instance.new("ScrollingFrame")
 						SettingsContainer.Size = UDim2.new(1, -12, 1, -40)
 						SettingsContainer.Position = UDim2.new(0, 6, 0, 36)
 						SettingsContainer.BackgroundTransparency = 1
-						SettingsContainer.ZIndex = 6
+						SettingsContainer.ZIndex = 16
 						SettingsContainer.Parent = SettingsPage
 
 						local SettLayout = Instance.new("UIListLayout")
@@ -845,6 +913,7 @@ function NovdorLibrary:CreateWindow(config)
 			return SubTab
 		end
 
+		table.insert(Window.Tabs, Tab)
 		return Tab
 	end
 
@@ -854,10 +923,6 @@ function NovdorLibrary:CreateWindow(config)
 
 	return Window
 end
-
--- ============================================================================
--- Utility Internal System Functions & Extended Interface Engine
--- ============================================================================
 
 local Utilities = {}
 
@@ -947,5 +1012,4 @@ function NovdorLibrary:Destroy()
 	end
 end
 
--- End of Novdor Engine Library System
 return NovdorLibrary
