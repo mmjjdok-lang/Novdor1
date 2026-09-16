@@ -37,6 +37,20 @@ RunService.RenderStepped:Connect(function(deltaTime)
 	end
 end)
 
+local function AddClickAnimation(button)
+	button.MouseButton1Down:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			Size = UDim2.new(button.Size.X.Scale, button.Size.X.Offset - 4, button.Size.Y.Scale, button.Size.Y.Offset - 4)
+		}):Play()
+	end)
+	
+	button.MouseButton1Up:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+			Size = UDim2.new(button.Size.X.Scale, button.Size.X.Offset, button.Size.Y.Scale, button.Size.Y.Offset)
+		}):Play()
+	end)
+end
+
 local function GetValidFont(fontInput)
 	local defaultFont = Enum.Font.FredokaOne
 	if not fontInput then return defaultFont end
@@ -205,6 +219,7 @@ function NovdorLibrary:CreateWindow(config)
 	OpenBtn.Active = true
 	OpenBtn.Draggable = true
 	OpenBtn.Parent = ScreenGui
+	AddClickAnimation(OpenBtn)
 
 	local OpenCorner = Instance.new("UICorner")
 	OpenCorner.CornerRadius = UDim.new(0, 12)
@@ -260,13 +275,14 @@ function NovdorLibrary:CreateWindow(config)
 	local CloseBtn = Instance.new("TextButton")
 	CloseBtn.Size = UDim2.new(0, 28, 0, 28)
 	CloseBtn.Position = UDim2.new(1, -34, 0, 11)
-	CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-	CloseBtn.Text = "✕"
+	CloseBtn.BackgroundColor3 = Color3.fromRGB(220, 40, 40)
+	CloseBtn.Text = "✖"
 	CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	CloseBtn.Font = SelectedFont
+	CloseBtn.Font = Enum.Font.GothamBold
 	CloseBtn.TextSize = 14
 	CloseBtn.BorderSizePixel = 0
 	CloseBtn.Parent = TitleBar
+	AddClickAnimation(CloseBtn)
 
 	local CloseCorner = Instance.new("UICorner")
 	CloseCorner.CornerRadius = UDim.new(0, 8)
@@ -275,8 +291,8 @@ function NovdorLibrary:CreateWindow(config)
 	CloseBtn.MouseButton1Click:Connect(function()
 		ClickSound:Play()
 		local ConfirmFrame = Instance.new("Frame")
-		ConfirmFrame.Size = UDim2.new(0, 300, 0, 140)
-		ConfirmFrame.Position = UDim2.new(0.5, -150, 0.5, -70)
+		ConfirmFrame.Size = UDim2.new(0, 320, 0, 140)
+		ConfirmFrame.Position = UDim2.new(0.5, -160, 0.5, -70)
 		ConfirmFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
 		ConfirmFrame.BorderSizePixel = 0
 		ConfirmFrame.ZIndex = 50
@@ -293,7 +309,7 @@ function NovdorLibrary:CreateWindow(config)
 
 		local ConfirmTitle = Instance.new("TextLabel")
 		ConfirmTitle.Size = UDim2.new(1, 0, 0, 50)
-		ConfirmTitle.Text = "هل أنت متأكد من إغلاق وحذف السكربت؟"
+		ConfirmTitle.Text = "Are you sure you want to close the script?"
 		ConfirmTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 		ConfirmTitle.Font = SelectedFont
 		ConfirmTitle.TextSize = 13
@@ -302,30 +318,32 @@ function NovdorLibrary:CreateWindow(config)
 		ConfirmTitle.Parent = ConfirmFrame
 
 		local YesBtn = Instance.new("TextButton")
-		YesBtn.Size = UDim2.new(0, 110, 0, 34)
+		YesBtn.Size = UDim2.new(0, 115, 0, 34)
 		YesBtn.Position = UDim2.new(0, 25, 1, -50)
 		YesBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-		YesBtn.Text = "نعم (حذف)"
+		YesBtn.Text = "Yes (Close)"
 		YesBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 		YesBtn.Font = SelectedFont
 		YesBtn.TextSize = 13
 		YesBtn.ZIndex = 51
 		YesBtn.Parent = ConfirmFrame
+		AddClickAnimation(YesBtn)
 
 		local YesCorner = Instance.new("UICorner")
 		YesCorner.CornerRadius = UDim.new(0, 8)
 		YesCorner.Parent = YesBtn
 
 		local NoBtn = Instance.new("TextButton")
-		NoBtn.Size = UDim2.new(0, 110, 0, 34)
-		NoBtn.Position = UDim2.new(1, -135, 1, -50)
+		NoBtn.Size = UDim2.new(0, 115, 0, 34)
+		NoBtn.Position = UDim2.new(1, -140, 1, -50)
 		NoBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
-		NoBtn.Text = "إلغاء"
+		NoBtn.Text = "Cancel"
 		NoBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 		NoBtn.Font = SelectedFont
 		NoBtn.TextSize = 13
 		NoBtn.ZIndex = 51
 		NoBtn.Parent = ConfirmFrame
+		AddClickAnimation(NoBtn)
 
 		local NoCorner = Instance.new("UICorner")
 		NoCorner.CornerRadius = UDim.new(0, 8)
@@ -381,6 +399,7 @@ function NovdorLibrary:CreateWindow(config)
 		TabButton.Font = SelectedFont
 		TabButton.TextSize = 13
 		TabButton.Parent = TabSidebar
+		AddClickAnimation(TabButton)
 
 		local TabBtnCorner = Instance.new("UICorner")
 		TabBtnCorner.CornerRadius = UDim.new(0, 8)
@@ -448,6 +467,7 @@ function NovdorLibrary:CreateWindow(config)
 			SubBtn.Font = SelectedFont
 			SubBtn.TextSize = 12
 			SubBtn.Parent = SubTabBar
+			AddClickAnimation(SubBtn)
 
 			local SubBtnCorner = Instance.new("UICorner")
 			SubBtnCorner.CornerRadius = UDim.new(0, 6)
@@ -496,7 +516,30 @@ function NovdorLibrary:CreateWindow(config)
 			local SubTab = {Btn = SubBtn, Page = SubPage, Stroke = SubBtnStroke}
 			table.insert(Tab.SubTabs, SubTab)
 
-			function SubTab:AddButton(text, callback, settingsCallback)
+			function SubTab:AddLabel(text)
+				local LblFrame = Instance.new("Frame")
+				LblFrame.Size = UDim2.new(1, -6, 0, 30)
+				LblFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
+				LblFrame.BorderSizePixel = 0
+				LblFrame.Parent = SubPage
+
+				local LblCorner = Instance.new("UICorner")
+				LblCorner.CornerRadius = UDim.new(0, 6)
+				LblCorner.Parent = LblFrame
+
+				local LblText = Instance.new("TextLabel")
+				LblText.Size = UDim2.new(1, -12, 1, 0)
+				LblText.Position = UDim2.new(0, 6, 0, 0)
+				LblText.Text = text or "Label Text"
+				LblText.TextColor3 = Color3.fromRGB(200, 200, 255)
+				LblText.Font = SelectedFont
+				LblText.TextSize = 13
+				LblText.TextXAlignment = Enum.TextXAlignment.Left
+				LblText.BackgroundTransparency = 1
+				LblText.Parent = LblFrame
+			end
+
+			function SubTab:AddButton(text, callback)
 				local BtnFrame = Instance.new("Frame")
 				BtnFrame.Size = UDim2.new(1, -6, 0, 36)
 				BtnFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
@@ -513,97 +556,130 @@ function NovdorLibrary:CreateWindow(config)
 				CreateAnimatedGradient(BtnStroke)
 
 				local ActionBtn = Instance.new("TextButton")
-				ActionBtn.Size = settingsCallback and UDim2.new(1, -40, 1, 0) or UDim2.new(1, 0, 1, 0)
+				ActionBtn.Size = UDim2.new(1, 0, 1, 0)
 				ActionBtn.BackgroundTransparency = 1
 				ActionBtn.Text = text
 				ActionBtn.TextColor3 = Color3.fromRGB(240, 240, 240)
 				ActionBtn.Font = SelectedFont
 				ActionBtn.TextSize = 13
 				ActionBtn.Parent = BtnFrame
+				AddClickAnimation(ActionBtn)
+
+				ActionBtn.MouseButton1Click:Connect(function()
+					ClickSound:Play()
+					if callback then callback() end
+				end)
+			end
+
+			function SubTab:AddButtonWithSettings(text, callback, settingsCallback)
+				local BtnFrame = Instance.new("Frame")
+				BtnFrame.Size = UDim2.new(1, -6, 0, 36)
+				BtnFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				BtnFrame.BorderSizePixel = 0
+				BtnFrame.Parent = SubPage
+
+				local BtnCorner = Instance.new("UICorner")
+				BtnCorner.CornerRadius = UDim.new(0, 8)
+				BtnCorner.Parent = BtnFrame
+
+				local BtnStroke = Instance.new("UIStroke")
+				BtnStroke.Thickness = 1.5
+				BtnStroke.Parent = BtnFrame
+				CreateAnimatedGradient(BtnStroke)
+
+				local ActionBtn = Instance.new("TextButton")
+				ActionBtn.Size = UDim2.new(1, -40, 1, 0)
+				ActionBtn.BackgroundTransparency = 1
+				ActionBtn.Text = text
+				ActionBtn.TextColor3 = Color3.fromRGB(240, 240, 240)
+				ActionBtn.Font = SelectedFont
+				ActionBtn.TextSize = 13
+				ActionBtn.Parent = BtnFrame
+				AddClickAnimation(ActionBtn)
 
 				ActionBtn.MouseButton1Click:Connect(function()
 					ClickSound:Play()
 					if callback then callback() end
 				end)
 
-				if settingsCallback then
-					local SettingsBtn = Instance.new("TextButton")
-					SettingsBtn.Size = UDim2.new(0, 30, 0, 30)
-					SettingsBtn.Position = UDim2.new(1, -33, 0.5, -15)
-					SettingsBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
-					SettingsBtn.Text = "⚙️"
-					SettingsBtn.TextSize = 14
-					SettingsBtn.Parent = BtnFrame
+				local SettingsBtn = Instance.new("TextButton")
+				SettingsBtn.Size = UDim2.new(0, 30, 0, 30)
+				SettingsBtn.Position = UDim2.new(1, -33, 0.5, -15)
+				SettingsBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+				SettingsBtn.Text = "⚙️"
+				SettingsBtn.TextSize = 14
+				SettingsBtn.Parent = BtnFrame
+				AddClickAnimation(SettingsBtn)
 
-					local SettCorner = Instance.new("UICorner")
-					SettCorner.CornerRadius = UDim.new(0, 6)
-					SettCorner.Parent = SettingsBtn
+				local SettCorner = Instance.new("UICorner")
+				SettCorner.CornerRadius = UDim.new(0, 6)
+				SettCorner.Parent = SettingsBtn
 
-					SettingsBtn.MouseButton1Click:Connect(function()
+				SettingsBtn.MouseButton1Click:Connect(function()
+					ClickSound:Play()
+					local SettingsPage = Instance.new("Frame")
+					SettingsPage.Size = UDim2.new(1, 0, 1, 0)
+					SettingsPage.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+					SettingsPage.BorderSizePixel = 0
+					SettingsPage.ZIndex = 15
+					SettingsPage.Parent = SubContentContainer
+
+					local SettPageCorner = Instance.new("UICorner")
+					SettPageCorner.CornerRadius = UDim.new(0, 10)
+					SettPageCorner.Parent = SettingsPage
+
+					local BackHeader = Instance.new("Frame")
+					BackHeader.Size = UDim2.new(1, 0, 0, 32)
+					BackHeader.BackgroundTransparency = 1
+					BackHeader.ZIndex = 16
+					BackHeader.Parent = SettingsPage
+
+					local BackBtn = Instance.new("TextButton")
+					BackBtn.Size = UDim2.new(0, 80, 0, 26)
+					BackBtn.Position = UDim2.new(0, 6, 0.5, -13)
+					BackBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+					BackBtn.Text = "◄ Exit"
+					BackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+					BackBtn.Font = SelectedFont
+					BackBtn.TextSize = 12
+					BackBtn.ZIndex = 16
+					BackBtn.Parent = BackHeader
+					AddClickAnimation(BackBtn)
+
+					local BackCorner = Instance.new("UICorner")
+					BackCorner.CornerRadius = UDim.new(0, 6)
+					BackCorner.Parent = BackBtn
+
+					local SettTitle = Instance.new("TextLabel")
+					SettTitle.Size = UDim2.new(1, -100, 1, 0)
+					SettTitle.Position = UDim2.new(0, 95, 0, 0)
+					SettTitle.Text = text .. " Settings"
+					SettTitle.TextColor3 = Color3.fromRGB(200, 200, 255)
+					SettTitle.Font = SelectedFont
+					SettTitle.TextSize = 13
+					SettTitle.TextXAlignment = Enum.TextXAlignment.Left
+					SettTitle.BackgroundTransparency = 1
+					SettTitle.ZIndex = 16
+					SettTitle.Parent = BackHeader
+
+					local SettingsContainer = Instance.new("ScrollingFrame")
+					SettingsContainer.Size = UDim2.new(1, -12, 1, -40)
+					SettingsContainer.Position = UDim2.new(0, 6, 0, 36)
+					SettingsContainer.BackgroundTransparency = 1
+					SettingsContainer.ZIndex = 16
+					SettingsContainer.Parent = SettingsPage
+
+					local SettLayout = Instance.new("UIListLayout")
+					SettLayout.Parent = SettingsContainer
+					SettLayout.Padding = UDim.new(0, 6)
+
+					BackBtn.MouseButton1Click:Connect(function()
 						ClickSound:Play()
-						local SettingsPage = Instance.new("Frame")
-						SettingsPage.Size = UDim2.new(1, 0, 1, 0)
-						SettingsPage.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
-						SettingsPage.BorderSizePixel = 0
-						SettingsPage.ZIndex = 15
-						SettingsPage.Parent = SubContentContainer
-
-						local SettPageCorner = Instance.new("UICorner")
-						SettPageCorner.CornerRadius = UDim.new(0, 10)
-						SettPageCorner.Parent = SettingsPage
-
-						local BackHeader = Instance.new("Frame")
-						BackHeader.Size = UDim2.new(1, 0, 0, 32)
-						BackHeader.BackgroundTransparency = 1
-						BackHeader.ZIndex = 16
-						BackHeader.Parent = SettingsPage
-
-						local BackBtn = Instance.new("TextButton")
-						BackBtn.Size = UDim2.new(0, 80, 0, 26)
-						BackBtn.Position = UDim2.new(0, 6, 0.5, -13)
-						BackBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
-						BackBtn.Text = "◄ Exit"
-						BackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-						BackBtn.Font = SelectedFont
-						BackBtn.TextSize = 12
-						BackBtn.ZIndex = 16
-						BackBtn.Parent = BackHeader
-
-						local BackCorner = Instance.new("UICorner")
-						BackCorner.CornerRadius = UDim.new(0, 6)
-						BackCorner.Parent = BackBtn
-
-						local SettTitle = Instance.new("TextLabel")
-						SettTitle.Size = UDim2.new(1, -100, 1, 0)
-						SettTitle.Position = UDim2.new(0, 95, 0, 0)
-						SettTitle.Text = text .. " Settings"
-						SettTitle.TextColor3 = Color3.fromRGB(200, 200, 255)
-						SettTitle.Font = SelectedFont
-						SettTitle.TextSize = 13
-						SettTitle.TextXAlignment = Enum.TextXAlignment.Left
-						SettTitle.BackgroundTransparency = 1
-						SettTitle.ZIndex = 16
-						SettTitle.Parent = BackHeader
-
-						local SettingsContainer = Instance.new("ScrollingFrame")
-						SettingsContainer.Size = UDim2.new(1, -12, 1, -40)
-						SettingsContainer.Position = UDim2.new(0, 6, 0, 36)
-						SettingsContainer.BackgroundTransparency = 1
-						SettingsContainer.ZIndex = 16
-						SettingsContainer.Parent = SettingsPage
-
-						local SettLayout = Instance.new("UIListLayout")
-						SettLayout.Parent = SettingsContainer
-						SettLayout.Padding = UDim.new(0, 6)
-
-						BackBtn.MouseButton1Click:Connect(function()
-							ClickSound:Play()
-							SettingsPage:Destroy()
-						end)
-
-						if settingsCallback then settingsCallback(SettingsContainer) end
+						SettingsPage:Destroy()
 					end)
-				end
+
+					if settingsCallback then settingsCallback(SettingsContainer) end
+				end)
 			end
 
 			function SubTab:AddToggle(text, default, callback)
@@ -664,6 +740,7 @@ function NovdorLibrary:CreateWindow(config)
 				TriggerBtn.BackgroundTransparency = 1
 				TriggerBtn.Text = ""
 				TriggerBtn.Parent = TglFrame
+				AddClickAnimation(TriggerBtn)
 
 				local state = default or false
 				TriggerBtn.MouseButton1Click:Connect(function()
@@ -674,6 +751,157 @@ function NovdorLibrary:CreateWindow(config)
 						Position = state and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
 					}):Play()
 					if callback then callback(state) end
+				end)
+			end
+
+			function SubTab:AddToggleWithSettings(text, default, callback, settingsCallback)
+				local TglFrame = Instance.new("Frame")
+				TglFrame.Size = UDim2.new(1, -6, 0, 36)
+				TglFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				TglFrame.BorderSizePixel = 0
+				TglFrame.Parent = SubPage
+
+				local TglCorner = Instance.new("UICorner")
+				TglCorner.CornerRadius = UDim.new(0, 8)
+				TglCorner.Parent = TglFrame
+
+				local TglStroke = Instance.new("UIStroke")
+				TglStroke.Thickness = 1
+				TglStroke.Transparency = 0.5
+				TglStroke.Parent = TglFrame
+				CreateAnimatedGradient(TglStroke)
+
+				local TglLabel = Instance.new("TextLabel")
+				TglLabel.Size = UDim2.new(1, -95, 1, 0)
+				TglLabel.Position = UDim2.new(0, 12, 0, 0)
+				TglLabel.Text = text
+				TglLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+				TglLabel.Font = SelectedFont
+				TglLabel.TextSize = 13
+				TglLabel.TextXAlignment = Enum.TextXAlignment.Left
+				TglLabel.BackgroundTransparency = 1
+				TglLabel.Parent = TglFrame
+
+				local SwitchBg = Instance.new("Frame")
+				SwitchBg.Size = UDim2.new(0, 38, 0, 20)
+				SwitchBg.Position = UDim2.new(1, -85, 0.5, -10)
+				SwitchBg.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+				SwitchBg.BorderSizePixel = 0
+				SwitchBg.Parent = TglFrame
+
+				local SwitchCorner = Instance.new("UICorner")
+				SwitchCorner.CornerRadius = UDim.new(1, 0)
+				SwitchCorner.Parent = SwitchBg
+
+				local SwitchGradient = CreateAnimatedGradient(SwitchBg)
+				SwitchGradient.Enabled = default or false
+
+				local Dot = Instance.new("Frame")
+				Dot.Size = UDim2.new(0, 14, 0, 14)
+				Dot.Position = default and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
+				Dot.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				Dot.BorderSizePixel = 0
+				Dot.Parent = SwitchBg
+
+				local DotCorner = Instance.new("UICorner")
+				DotCorner.CornerRadius = UDim.new(1, 0)
+				DotCorner.Parent = Dot
+
+				local TriggerBtn = Instance.new("TextButton")
+				TriggerBtn.Size = UDim2.new(1, -40, 1, 0)
+				TriggerBtn.BackgroundTransparency = 1
+				TriggerBtn.Text = ""
+				TriggerBtn.Parent = TglFrame
+				AddClickAnimation(TriggerBtn)
+
+				local SettingsBtn = Instance.new("TextButton")
+				SettingsBtn.Size = UDim2.new(0, 30, 0, 30)
+				SettingsBtn.Position = UDim2.new(1, -33, 0.5, -15)
+				SettingsBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+				SettingsBtn.Text = "⚙️"
+				SettingsBtn.TextSize = 14
+				SettingsBtn.Parent = TglFrame
+				AddClickAnimation(SettingsBtn)
+
+				local SettCorner = Instance.new("UICorner")
+				SettCorner.CornerRadius = UDim.new(0, 6)
+				SettCorner.Parent = SettingsBtn
+
+				local state = default or false
+				TriggerBtn.MouseButton1Click:Connect(function()
+					ClickSound:Play()
+					state = not state
+					SwitchGradient.Enabled = state
+					TweenService:Create(Dot, TweenInfo.new(0.2), {
+						Position = state and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
+					}):Play()
+					if callback then callback(state) end
+				end)
+
+				SettingsBtn.MouseButton1Click:Connect(function()
+					ClickSound:Play()
+					local SettingsPage = Instance.new("Frame")
+					SettingsPage.Size = UDim2.new(1, 0, 1, 0)
+					SettingsPage.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+					SettingsPage.BorderSizePixel = 0
+					SettingsPage.ZIndex = 15
+					SettingsPage.Parent = SubContentContainer
+
+					local SettPageCorner = Instance.new("UICorner")
+					SettPageCorner.CornerRadius = UDim.new(0, 10)
+					SettPageCorner.Parent = SettingsPage
+
+					local BackHeader = Instance.new("Frame")
+					BackHeader.Size = UDim2.new(1, 0, 0, 32)
+					BackHeader.BackgroundTransparency = 1
+					BackHeader.ZIndex = 16
+					BackHeader.Parent = SettingsPage
+
+					local BackBtn = Instance.new("TextButton")
+					BackBtn.Size = UDim2.new(0, 80, 0, 26)
+					BackBtn.Position = UDim2.new(0, 6, 0.5, -13)
+					BackBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+					BackBtn.Text = "◄ Exit"
+					BackBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+					BackBtn.Font = SelectedFont
+					BackBtn.TextSize = 12
+					BackBtn.ZIndex = 16
+					BackBtn.Parent = BackHeader
+					AddClickAnimation(BackBtn)
+
+					local BackCorner = Instance.new("UICorner")
+					BackCorner.CornerRadius = UDim.new(0, 6)
+					BackCorner.Parent = BackBtn
+
+					local SettTitle = Instance.new("TextLabel")
+					SettTitle.Size = UDim2.new(1, -100, 1, 0)
+					SettTitle.Position = UDim2.new(0, 95, 0, 0)
+					SettTitle.Text = text .. " Settings"
+					SettTitle.TextColor3 = Color3.fromRGB(200, 200, 255)
+					SettTitle.Font = SelectedFont
+					SettTitle.TextSize = 13
+					SettTitle.TextXAlignment = Enum.TextXAlignment.Left
+					SettTitle.BackgroundTransparency = 1
+					SettTitle.ZIndex = 16
+					SettTitle.Parent = BackHeader
+
+					local SettingsContainer = Instance.new("ScrollingFrame")
+					SettingsContainer.Size = UDim2.new(1, -12, 1, -40)
+					SettingsContainer.Position = UDim2.new(0, 6, 0, 36)
+					SettingsContainer.BackgroundTransparency = 1
+					SettingsContainer.ZIndex = 16
+					SettingsContainer.Parent = SettingsPage
+
+					local SettLayout = Instance.new("UIListLayout")
+					SettLayout.Parent = SettingsContainer
+					SettLayout.Padding = UDim.new(0, 6)
+
+					BackBtn.MouseButton1Click:Connect(function()
+						ClickSound:Play()
+						SettingsPage:Destroy()
+					end)
+
+					if settingsCallback then settingsCallback(SettingsContainer) end
 				end)
 			end
 
@@ -875,6 +1103,7 @@ function NovdorLibrary:CreateWindow(config)
 				DropBtn.BackgroundTransparency = 1
 				DropBtn.Text = ""
 				DropBtn.Parent = DropFrame
+				AddClickAnimation(DropBtn)
 
 				DropBtn.MouseButton1Click:Connect(function()
 					ClickSound:Play()
@@ -894,6 +1123,7 @@ function NovdorLibrary:CreateWindow(config)
 					OptBtn.Font = SelectedFont
 					OptBtn.TextSize = 12
 					OptBtn.Parent = OptionContainer
+					AddClickAnimation(OptBtn)
 
 					local OptCorner = Instance.new("UICorner")
 					OptCorner.CornerRadius = UDim.new(0, 4)
@@ -967,40 +1197,6 @@ function Utilities:AddToolTip(guiObject, text)
 
 	guiObject.MouseMoved:Connect(function(x, y)
 		Tooltip.Position = UDim2.new(0, x + 10, 0, y + 10)
-	end)
-end
-
-function Utilities:RippleEffect(button)
-	button.ClipsDescendants = true
-	button.MouseButton1Click:Connect(function()
-		local mouse = LocalPlayer:GetMouse()
-		local x = mouse.X - button.AbsolutePosition.X
-		local y = mouse.Y - button.AbsolutePosition.Y
-
-		local Circle = Instance.new("Frame")
-		Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		Circle.BackgroundTransparency = 0.6
-		Circle.Position = UDim2.new(0, x, 0, y)
-		Circle.Size = UDim2.new(0, 0, 0, 0)
-		Circle.Parent = button
-
-		local CircleCorner = Instance.new("UICorner")
-		CircleCorner.CornerRadius = UDim.new(1, 0)
-		CircleCorner.Parent = Circle
-
-		local maxSize = math.max(button.AbsoluteSize.X, button.AbsoluteSize.Y) * 2
-
-		local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-		local tween = TweenService:Create(Circle, tweenInfo, {
-			Size = UDim2.new(0, maxSize, 0, maxSize),
-			Position = UDim2.new(0, x - maxSize / 2, 0, y - maxSize / 2),
-			BackgroundTransparency = 1
-		})
-
-		tween:Play()
-		tween.Completed:Connect(function()
-			Circle:Destroy()
-		end)
 	end)
 end
 
