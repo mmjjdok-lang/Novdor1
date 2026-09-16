@@ -12,9 +12,8 @@ ClickSound.SoundId = "rbxassetid://131100371"
 ClickSound.Volume = 0.5
 ClickSound.Parent = SoundService
 
-local HorrorLibrary = {}
+local NovdorLibrary = {}
 
--- نظام محرك التدرج المتحرك (Blue & Purple Gradient Engine)
 local AnimatedGradients = {}
 
 local function CreateAnimatedGradient(parent)
@@ -61,16 +60,16 @@ local function FormatAssetId(id)
 	return "rbxassetid://103371567195289"
 end
 
-function HorrorLibrary:CreateWindow(config)
+function NovdorLibrary:CreateWindow(config)
 	config = config or {}
-	local TitleText = config.Title or "SYSTEM UI"
-	local SubTitleText = config.SubTitle or "Advanced System 2026"
+	local TitleText = config.Title or "NOVDOR UI"
+	local SubTitleText = config.SubTitle or "Animated Blue-Purple Theme"
 	local Size = config.Size or UDim2.new(0, 580, 0, 350)
 	local SelectedFont = GetValidFont(config.Font or Enum.Font.FredokaOne)
 	local GlobalBackgroundImage = FormatAssetId(config.BackgroundImage or "103371567195289")
 
 	local ScreenGui = Instance.new("ScreenGui")
-	ScreenGui.Name = "AdvancedGradientGui"
+	ScreenGui.Name = "NovdorGui"
 	ScreenGui.ResetOnSpawn = false
 	ScreenGui.Parent = PlayerGui
 
@@ -102,7 +101,96 @@ function HorrorLibrary:CreateWindow(config)
 	BackgroundImage.ScaleType = Enum.ScaleType.Crop
 	BackgroundImage.Parent = MainFrame
 
-	-- زر Open Button
+	local NotificationContainer = Instance.new("Frame")
+	NotificationContainer.Name = "NotificationContainer"
+	NotificationContainer.Size = UDim2.new(0, 260, 1, -20)
+	NotificationContainer.Position = UDim2.new(1, -270, 0, 10)
+	NotificationContainer.BackgroundTransparency = 1
+	NotificationContainer.Parent = ScreenGui
+
+	local NotifLayout = Instance.new("UIListLayout")
+	NotifLayout.Parent = NotificationContainer
+	NotifLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	NotifLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
+	NotifLayout.Padding = UDim.new(0, 8)
+
+	function NovdorLibrary:Notify(notifConfig)
+		notifConfig = notifConfig or {}
+		local nTitle = notifConfig.Title or "NOTIFICATION"
+		local nText = notifConfig.Text or ""
+		local duration = notifConfig.Duration or 4
+
+		local NotifFrame = Instance.new("Frame")
+		NotifFrame.Size = UDim2.new(1, 0, 0, 65)
+		NotifFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+		NotifFrame.BorderSizePixel = 0
+		NotifFrame.ClipsDescendants = true
+		NotifFrame.Parent = NotificationContainer
+
+		local NotifCorner = Instance.new("UICorner")
+		NotifCorner.CornerRadius = UDim.new(0, 12)
+		NotifCorner.Parent = NotifFrame
+
+		local NotifStroke = Instance.new("UIStroke")
+		NotifStroke.Thickness = 2
+		NotifStroke.Parent = NotifFrame
+		CreateAnimatedGradient(NotifStroke)
+
+		local NotifTitle = Instance.new("TextLabel")
+		NotifTitle.Size = UDim2.new(1, -16, 0, 20)
+		NotifTitle.Position = UDim2.new(0, 12, 0, 8)
+		NotifTitle.Text = nTitle
+		NotifTitle.TextColor3 = Color3.fromRGB(180, 130, 255)
+		NotifTitle.Font = SelectedFont
+		NotifTitle.TextSize = 14
+		NotifTitle.TextXAlignment = Enum.TextXAlignment.Left
+		NotifTitle.BackgroundTransparency = 1
+		NotifTitle.Parent = NotifFrame
+
+		local NotifDesc = Instance.new("TextLabel")
+		NotifDesc.Size = UDim2.new(1, -16, 0, 25)
+		NotifDesc.Position = UDim2.new(0, 12, 0, 28)
+		NotifDesc.Text = nText
+		NotifDesc.TextColor3 = Color3.fromRGB(220, 220, 230)
+		NotifDesc.Font = SelectedFont
+		NotifDesc.TextSize = 12
+		NotifDesc.TextXAlignment = Enum.TextXAlignment.Left
+		NotifDesc.BackgroundTransparency = 1
+		NotifDesc.Parent = NotifFrame
+
+		local ProgressBarBg = Instance.new("Frame")
+		ProgressBarBg.Size = UDim2.new(1, -24, 0, 4)
+		ProgressBarBg.Position = UDim2.new(0, 12, 1, -8)
+		ProgressBarBg.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+		ProgressBarBg.BorderSizePixel = 0
+		ProgressBarBg.Parent = NotifFrame
+
+		local BarCorner = Instance.new("UICorner")
+		BarCorner.CornerRadius = UDim.new(1, 0)
+		BarCorner.Parent = ProgressBarBg
+
+		local ProgressBarFill = Instance.new("Frame")
+		ProgressBarFill.Size = UDim2.new(1, 0, 1, 0)
+		ProgressBarFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		ProgressBarFill.BorderSizePixel = 0
+		ProgressBarFill.Parent = ProgressBarBg
+		CreateAnimatedGradient(ProgressBarFill)
+
+		local FillCorner = Instance.new("UICorner")
+		FillCorner.CornerRadius = UDim.new(1, 0)
+		FillCorner.Parent = ProgressBarFill
+
+		ClickSound:Play()
+		TweenService:Create(ProgressBarFill, TweenInfo.new(duration, Enum.EasingStyle.Linear), {Size = UDim2.new(0, 0, 1, 0)}):Play()
+
+		task.delay(duration, function()
+			TweenService:Create(NotifFrame, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
+			NotifFrame:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.3, true, function()
+				NotifFrame:Destroy()
+			end)
+		end)
+	end
+
 	local OpenBtn = Instance.new("TextButton")
 	OpenBtn.Name = "OpenButton"
 	OpenBtn.Size = UDim2.new(0, 90, 0, 40)
@@ -140,7 +228,6 @@ function HorrorLibrary:CreateWindow(config)
 		end
 	end)
 
-	-- شريط العنوان
 	local TitleBar = Instance.new("Frame")
 	TitleBar.Size = UDim2.new(1, 0, 0, 50)
 	TitleBar.BackgroundColor3 = Color3.fromRGB(18, 18, 26)
@@ -243,7 +330,6 @@ function HorrorLibrary:CreateWindow(config)
 		TabPage.Visible = false
 		TabPage.Parent = ContentContainer
 
-		-- شريط التبويبات الفرعية في اليسار بالأعلى (Sub-Tabs Bar)
 		local SubTabBar = Instance.new("ScrollingFrame")
 		SubTabBar.Size = UDim2.new(1, 0, 0, 30)
 		SubTabBar.Position = UDim2.new(0, 0, 0, 0)
@@ -284,7 +370,6 @@ function HorrorLibrary:CreateWindow(config)
 
 		local Tab = {Button = TabButton, Page = TabPage, Stroke = TabStroke, SubTabs = {}}
 
-		-- نظام التبويبات الداخلي/الفرعي (Sub-Tabs System)
 		function Tab:CreateSubTab(subTabName)
 			local SubBtn = Instance.new("TextButton")
 			SubBtn.Size = UDim2.new(0, 90, 1, 0)
@@ -343,7 +428,6 @@ function HorrorLibrary:CreateWindow(config)
 			local SubTab = {Btn = SubBtn, Page = SubPage, Stroke = SubBtnStroke}
 			table.insert(Tab.SubTabs, SubTab)
 
-			-- عناصر التحكم داخل التبويب الفرعي
 			function SubTab:AddButton(text, callback, settingsCallback)
 				local BtnFrame = Instance.new("Frame")
 				BtnFrame.Size = UDim2.new(1, -6, 0, 36)
@@ -374,7 +458,6 @@ function HorrorLibrary:CreateWindow(config)
 					if callback then callback() end
 				end)
 
-				-- نظام زر الإعدادات باليمين فتح صفحة فرعية (Button Settings Page System)
 				if settingsCallback then
 					local SettingsBtn = Instance.new("TextButton")
 					SettingsBtn.Size = UDim2.new(0, 30, 0, 30)
@@ -390,7 +473,6 @@ function HorrorLibrary:CreateWindow(config)
 
 					SettingsBtn.MouseButton1Click:Connect(function()
 						ClickSound:Play()
-						-- صفحة الإعدادات لـ هذا الزر
 						local SettingsPage = Instance.new("Frame")
 						SettingsPage.Size = UDim2.new(1, 0, 1, 0)
 						SettingsPage.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
@@ -402,7 +484,6 @@ function HorrorLibrary:CreateWindow(config)
 						SettPageCorner.CornerRadius = UDim.new(0, 10)
 						SettPageCorner.Parent = SettingsPage
 
-						-- شريط العودة من صفحة الإعدادات
 						local BackHeader = Instance.new("Frame")
 						BackHeader.Size = UDim2.new(1, 0, 0, 32)
 						BackHeader.BackgroundTransparency = 1
@@ -457,6 +538,310 @@ function HorrorLibrary:CreateWindow(config)
 				end
 			end
 
+			function SubTab:AddToggle(text, default, callback)
+				local TglFrame = Instance.new("Frame")
+				TglFrame.Size = UDim2.new(1, -6, 0, 36)
+				TglFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				TglFrame.BorderSizePixel = 0
+				TglFrame.Parent = SubPage
+
+				local TglCorner = Instance.new("UICorner")
+				TglCorner.CornerRadius = UDim.new(0, 8)
+				TglCorner.Parent = TglFrame
+
+				local TglStroke = Instance.new("UIStroke")
+				TglStroke.Thickness = 1
+				TglStroke.Transparency = 0.5
+				TglStroke.Parent = TglFrame
+				CreateAnimatedGradient(TglStroke)
+
+				local TglLabel = Instance.new("TextLabel")
+				TglLabel.Size = UDim2.new(1, -60, 1, 0)
+				TglLabel.Position = UDim2.new(0, 12, 0, 0)
+				TglLabel.Text = text
+				TglLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+				TglLabel.Font = SelectedFont
+				TglLabel.TextSize = 13
+				TglLabel.TextXAlignment = Enum.TextXAlignment.Left
+				TglLabel.BackgroundTransparency = 1
+				TglLabel.Parent = TglFrame
+
+				local SwitchBg = Instance.new("Frame")
+				SwitchBg.Size = UDim2.new(0, 38, 0, 20)
+				SwitchBg.Position = UDim2.new(1, -48, 0.5, -10)
+				SwitchBg.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+				SwitchBg.BorderSizePixel = 0
+				SwitchBg.Parent = TglFrame
+
+				local SwitchCorner = Instance.new("UICorner")
+				SwitchCorner.CornerRadius = UDim.new(1, 0)
+				SwitchCorner.Parent = SwitchBg
+
+				local SwitchGradient = CreateAnimatedGradient(SwitchBg)
+				SwitchGradient.Enabled = default or false
+
+				local Dot = Instance.new("Frame")
+				Dot.Size = UDim2.new(0, 14, 0, 14)
+				Dot.Position = default and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
+				Dot.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				Dot.BorderSizePixel = 0
+				Dot.Parent = SwitchBg
+
+				local DotCorner = Instance.new("UICorner")
+				DotCorner.CornerRadius = UDim.new(1, 0)
+				DotCorner.Parent = Dot
+
+				local TriggerBtn = Instance.new("TextButton")
+				TriggerBtn.Size = UDim2.new(1, 0, 1, 0)
+				TriggerBtn.BackgroundTransparency = 1
+				TriggerBtn.Text = ""
+				TriggerBtn.Parent = TglFrame
+
+				local state = default or false
+				TriggerBtn.MouseButton1Click:Connect(function()
+					ClickSound:Play()
+					state = not state
+					SwitchGradient.Enabled = state
+					TweenService:Create(Dot, TweenInfo.new(0.2), {
+						Position = state and UDim2.new(1, -17, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
+					}):Play()
+					if callback then callback(state) end
+				end)
+			end
+
+			function SubTab:AddSlider(text, min, max, default, callback)
+				local SldFrame = Instance.new("Frame")
+				SldFrame.Size = UDim2.new(1, -6, 0, 45)
+				SldFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				SldFrame.BorderSizePixel = 0
+				SldFrame.Parent = SubPage
+
+				local SldCorner = Instance.new("UICorner")
+				SldCorner.CornerRadius = UDim.new(0, 8)
+				SldCorner.Parent = SldFrame
+
+				local SldStroke = Instance.new("UIStroke")
+				SldStroke.Thickness = 1
+				SldStroke.Transparency = 0.5
+				SldStroke.Parent = SldFrame
+				CreateAnimatedGradient(SldStroke)
+
+				local SldLabel = Instance.new("TextLabel")
+				SldLabel.Size = UDim2.new(1, -60, 0, 20)
+				SldLabel.Position = UDim2.new(0, 12, 0, 4)
+				SldLabel.Text = text
+				SldLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+				SldLabel.Font = SelectedFont
+				SldLabel.TextSize = 12
+				SldLabel.TextXAlignment = Enum.TextXAlignment.Left
+				SldLabel.BackgroundTransparency = 1
+				SldLabel.Parent = SldFrame
+
+				local ValLabel = Instance.new("TextLabel")
+				ValLabel.Size = UDim2.new(0, 50, 0, 20)
+				ValLabel.Position = UDim2.new(1, -55, 0, 4)
+				ValLabel.Text = tostring(default or min)
+				ValLabel.TextColor3 = Color3.fromRGB(180, 180, 200)
+				ValLabel.Font = SelectedFont
+				ValLabel.TextSize = 12
+				ValLabel.TextXAlignment = Enum.TextXAlignment.Right
+				ValLabel.BackgroundTransparency = 1
+				ValLabel.Parent = SldFrame
+
+				local BarBg = Instance.new("Frame")
+				BarBg.Size = UDim2.new(1, -24, 0, 6)
+				BarBg.Position = UDim2.new(0, 12, 1, -12)
+				BarBg.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+				BarBg.BorderSizePixel = 0
+				BarBg.Parent = SldFrame
+
+				local BarBgCorner = Instance.new("UICorner")
+				BarBgCorner.CornerRadius = UDim.new(1, 0)
+				BarBgCorner.Parent = BarBg
+
+				local BarFill = Instance.new("Frame")
+				BarFill.Size = UDim2.new(math.clamp(((default or min) - min) / (max - min), 0, 1), 0, 1, 0)
+				BarFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				BarFill.BorderSizePixel = 0
+				BarFill.Parent = BarBg
+				CreateAnimatedGradient(BarFill)
+
+				local BarFillCorner = Instance.new("UICorner")
+				BarFillCorner.CornerRadius = UDim.new(1, 0)
+				BarFillCorner.Parent = BarFill
+
+				local isDragging = false
+				local function UpdateSlider(input)
+					local pos = math.clamp((input.Position.X - BarBg.AbsolutePosition.X) / BarBg.AbsoluteSize.X, 0, 1)
+					local val = math.floor(min + (max - min) * pos)
+					BarFill.Size = UDim2.new(pos, 0, 1, 0)
+					ValLabel.Text = tostring(val)
+					if callback then callback(val) end
+				end
+
+				BarBg.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+						isDragging = true
+						UpdateSlider(input)
+					end
+				end)
+
+				UserInputService.InputEnded:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+						isDragging = false
+					end
+				end)
+
+				UserInputService.InputChanged:Connect(function(input)
+					if isDragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+						UpdateSlider(input)
+					end
+				end)
+			end
+
+			function SubTab:AddTextBox(text, placeholder, callback)
+				local BoxFrame = Instance.new("Frame")
+				BoxFrame.Size = UDim2.new(1, -6, 0, 36)
+				BoxFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				BoxFrame.BorderSizePixel = 0
+				BoxFrame.Parent = SubPage
+
+				local BoxCorner = Instance.new("UICorner")
+				BoxCorner.CornerRadius = UDim.new(0, 8)
+				BoxCorner.Parent = BoxFrame
+
+				local BoxStroke = Instance.new("UIStroke")
+				BoxStroke.Thickness = 1
+				BoxStroke.Transparency = 0.5
+				BoxStroke.Parent = BoxFrame
+				CreateAnimatedGradient(BoxStroke)
+
+				local BoxLabel = Instance.new("TextLabel")
+				BoxLabel.Size = UDim2.new(0.5, -10, 1, 0)
+				BoxLabel.Position = UDim2.new(0, 12, 0, 0)
+				BoxLabel.Text = text
+				BoxLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+				BoxLabel.Font = SelectedFont
+				BoxLabel.TextSize = 13
+				BoxLabel.TextXAlignment = Enum.TextXAlignment.Left
+				BoxLabel.BackgroundTransparency = 1
+				BoxLabel.Parent = BoxFrame
+
+				local InputBox = Instance.new("TextBox")
+				InputBox.Size = UDim2.new(0.5, -12, 0, 24)
+				InputBox.Position = UDim2.new(0.5, 0, 0.5, -12)
+				InputBox.BackgroundColor3 = Color3.fromRGB(30, 30, 42)
+				InputBox.BorderSizePixel = 0
+				InputBox.Text = ""
+				InputBox.PlaceholderText = placeholder or "Enter text..."
+				InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+				InputBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
+				InputBox.Font = SelectedFont
+				InputBox.TextSize = 12
+				InputBox.Parent = BoxFrame
+
+				local InputCorner = Instance.new("UICorner")
+				InputCorner.CornerRadius = UDim.new(0, 6)
+				InputCorner.Parent = InputBox
+
+				InputBox.FocusLost:Connect(function(enterPressed)
+					if enterPressed and callback then
+						callback(InputBox.Text)
+					end
+				end)
+			end
+
+			function SubTab:AddDropdown(text, options, callback)
+				options = options or {}
+				local DropFrame = Instance.new("Frame")
+				DropFrame.Size = UDim2.new(1, -6, 0, 36)
+				DropFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+				DropFrame.BorderSizePixel = 0
+				DropFrame.ClipsDescendants = true
+				DropFrame.Parent = SubPage
+
+				local DropCorner = Instance.new("UICorner")
+				DropCorner.CornerRadius = UDim.new(0, 8)
+				DropCorner.Parent = DropFrame
+
+				local DropStroke = Instance.new("UIStroke")
+				DropStroke.Thickness = 1
+				DropStroke.Transparency = 0.5
+				DropStroke.Parent = DropFrame
+				CreateAnimatedGradient(DropStroke)
+
+				local DropLabel = Instance.new("TextLabel")
+				DropLabel.Size = UDim2.new(1, -40, 0, 36)
+				DropLabel.Position = UDim2.new(0, 12, 0, 0)
+				DropLabel.Text = text
+				DropLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+				DropLabel.Font = SelectedFont
+				DropLabel.TextSize = 13
+				DropLabel.TextXAlignment = Enum.TextXAlignment.Left
+				DropLabel.BackgroundTransparency = 1
+				DropLabel.Parent = DropFrame
+
+				local Arrow = Instance.new("TextLabel")
+				Arrow.Size = UDim2.new(0, 30, 0, 36)
+				Arrow.Position = UDim2.new(1, -30, 0, 0)
+				Arrow.Text = "▼"
+				Arrow.TextColor3 = Color3.fromRGB(180, 180, 200)
+				Arrow.Font = SelectedFont
+				Arrow.TextSize = 12
+				Arrow.BackgroundTransparency = 1
+				Arrow.Parent = DropFrame
+
+				local OptionContainer = Instance.new("Frame")
+				OptionContainer.Size = UDim2.new(1, -12, 0, #options * 28)
+				OptionContainer.Position = UDim2.new(0, 6, 0, 36)
+				OptionContainer.BackgroundTransparency = 1
+				OptionContainer.Parent = DropFrame
+
+				local OptLayout = Instance.new("UIListLayout")
+				OptLayout.Parent = OptionContainer
+				OptLayout.Padding = UDim.new(0, 2)
+
+				local isOpen = false
+				local DropBtn = Instance.new("TextButton")
+				DropBtn.Size = UDim2.new(1, 0, 0, 36)
+				DropBtn.BackgroundTransparency = 1
+				DropBtn.Text = ""
+				DropBtn.Parent = DropFrame
+
+				DropBtn.MouseButton1Click:Connect(function()
+					ClickSound:Play()
+					isOpen = not isOpen
+					Arrow.Text = isOpen and "▲" or "▼"
+					local targetSize = isOpen and UDim2.new(1, -6, 0, 40 + (#options * 28)) or UDim2.new(1, -6, 0, 36)
+					TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = targetSize}):Play()
+				end)
+
+				for _, optName in ipairs(options) do
+					local OptBtn = Instance.new("TextButton")
+					OptBtn.Size = UDim2.new(1, 0, 0, 26)
+					OptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 40)
+					OptBtn.BorderSizePixel = 0
+					OptBtn.Text = optName
+					OptBtn.TextColor3 = Color3.fromRGB(200, 200, 220)
+					OptBtn.Font = SelectedFont
+					OptBtn.TextSize = 12
+					OptBtn.Parent = OptionContainer
+
+					local OptCorner = Instance.new("UICorner")
+					OptCorner.CornerRadius = UDim.new(0, 4)
+					OptCorner.Parent = OptBtn
+
+					OptBtn.MouseButton1Click:Connect(function()
+						ClickSound:Play()
+						DropLabel.Text = text .. " (" .. optName .. ")"
+						isOpen = false
+						Arrow.Text = "▼"
+						TweenService:Create(DropFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, -6, 0, 36)}):Play()
+						if callback then callback(optName) end
+					end)
+				end
+			end
+
 			return SubTab
 		end
 
@@ -470,4 +855,97 @@ function HorrorLibrary:CreateWindow(config)
 	return Window
 end
 
-return HorrorLibrary
+-- ============================================================================
+-- Utility Internal System Functions & Extended Interface Engine
+-- ============================================================================
+
+local Utilities = {}
+
+function Utilities:CreateShadow(parent)
+	local Shadow = Instance.new("ImageLabel")
+	Shadow.Name = "DropShadow"
+	Shadow.Size = UDim2.new(1, 10, 1, 10)
+	Shadow.Position = UDim2.new(0, -5, 0, -5)
+	Shadow.BackgroundTransparency = 1
+	Shadow.Image = "rbxassetid://1316045217"
+	Shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+	Shadow.ImageTransparency = 0.5
+	Shadow.ScaleType = Enum.ScaleType.Slice
+	Shadow.SliceCenter = Rect.new(10, 10, 118, 118)
+	Shadow.Parent = parent
+	return Shadow
+end
+
+function Utilities:AddToolTip(guiObject, text)
+	local Tooltip = Instance.new("TextLabel")
+	Tooltip.Name = "Tooltip"
+	Tooltip.Size = UDim2.new(0, 100, 0, 20)
+	Tooltip.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+	Tooltip.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Tooltip.Text = text
+	Tooltip.TextSize = 11
+	Tooltip.Visible = false
+	Tooltip.ZIndex = 10
+	Tooltip.Parent = PlayerGui
+
+	local Corner = Instance.new("UICorner")
+	Corner.CornerRadius = UDim.new(0, 4)
+	Corner.Parent = Tooltip
+
+	guiObject.MouseEnter:Connect(function()
+		Tooltip.Visible = true
+	end)
+
+	guiObject.MouseLeave:Connect(function()
+		Tooltip.Visible = false
+	end)
+
+	guiObject.MouseMoved:Connect(function(x, y)
+		Tooltip.Position = UDim2.new(0, x + 10, 0, y + 10)
+	end)
+end
+
+function Utilities:RippleEffect(button)
+	button.ClipsDescendants = true
+	button.MouseButton1Click:Connect(function()
+		local mouse = LocalPlayer:GetMouse()
+		local x = mouse.X - button.AbsolutePosition.X
+		local y = mouse.Y - button.AbsolutePosition.Y
+
+		local Circle = Instance.new("Frame")
+		Circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		Circle.BackgroundTransparency = 0.6
+		Circle.Position = UDim2.new(0, x, 0, y)
+		Circle.Size = UDim2.new(0, 0, 0, 0)
+		Circle.Parent = button
+
+		local CircleCorner = Instance.new("UICorner")
+		CircleCorner.CornerRadius = UDim.new(1, 0)
+		CircleCorner.Parent = Circle
+
+		local maxSize = math.max(button.AbsoluteSize.X, button.AbsoluteSize.Y) * 2
+
+		local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+		local tween = TweenService:Create(Circle, tweenInfo, {
+			Size = UDim2.new(0, maxSize, 0, maxSize),
+			Position = UDim2.new(0, x - maxSize / 2, 0, y - maxSize / 2),
+			BackgroundTransparency = 1
+		})
+
+		tween:Play()
+		tween.Completed:Connect(function()
+			Circle:Destroy()
+		end)
+	end)
+end
+
+function NovdorLibrary:Destroy()
+	for _, gui in ipairs(PlayerGui:GetChildren()) do
+		if gui.Name == "NovdorGui" then
+			gui:Destroy()
+		end
+	end
+end
+
+-- End of Novdor Engine Library System
+return NovdorLibrary
